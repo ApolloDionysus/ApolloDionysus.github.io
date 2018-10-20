@@ -16,9 +16,13 @@ I feel that the debate over the existance of God between the new-age athiests an
 
 There is one belief of mine that I am certain about, and that is the belief that _everything_ matters. I think often. Probably too much. All I seem to think about these days is the degeneration of culture. I struggle with porn addiction, which I believe is one of many untracable causes of the degeneration of culture, but I also think it's remnants of past injustices. For example, the civil war never really "ended", it was won. And the south still has contempt for the north and vice versa (actually, mainly vice versa). Identity politics and the American public's obsession with race is unimaginable without the creation of race by Americans and American culture's role in the perpetuation of that myth. 
 
-### Thoughts on women:
+### A hard reset:
 
-Made a bunch of mistakes with women. I can only give my perspective in terms of what a man would want from a woman. But I do think (speaking generally obviously) a woman wants to be a mother, and more than that a good mother. I think a man wants to take care of a woman. He also wants to be a good friend and teach other men how to be a good friend.
+I can only speak from a european perspective and speak with inconsistencies in fact and thought. Yet writing is thought, so why take it so seriously. Every thought should be considered, and the most "reasonable" (horrible word, implies we got to it with reason) idea should be the one that is stuck with. Reasonable in my way of using it means the idea that ideally has very few bad effects. The idea that best fits the problem at hand. It is OK if it contradicts other ideas, as some ideas only work in certain circumstances.
+
+The mistakes we make in life are somtimes so horrible and inhuman that what would really be best is a hard reset. A new chance at life. A new beginning. Luckly, it is human beings that are the most maliable of all living creatures. What other species has changed as much as we have in the past 2,000 years. What other species has so much difference in opinion. What other species has killed over THOUGHTS about other members of the spicies. That is a dark thought, but one worth thinking about. I can't imagine a dog attacking another dog because of how much he things another dog is evil. 
+
+I am in no place to talk about women. I think what has happened to feminity in the past two centuries is a tragedy, though. I truly wish we could have held unto that ideal but it seems to have gone with the wind. I can only give my perspective in terms of what a man would want from a woman. But I do think (speaking generally obviously) a woman wants to be a mother, and more than that a good mother. I think a man wants to take care of a woman. He also wants to be a good friend and teach other men how to be a good friend.
 
 Of course I am speaking in ideals. Man has a tyranical side which is characterized by violence, violent threats, betrayal, extreme risk taking at the expense of those who love him.
 
