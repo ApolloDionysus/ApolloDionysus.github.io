@@ -3,13 +3,15 @@ layout: post
 title: Sorting In Python / C++
 published: true
 ---
-Merge Sort
+## Sorting In Python / C++
 
-Quick Sort
+### Merge Sort
 
-Insert Sort
+### Quick Sort
 
-Tim Sort 
+### Insert Sort
+
+### Tim Sort
 
 Takeaways - Use sorted(...) in python. When to use sorted? What to use in C++.
 
