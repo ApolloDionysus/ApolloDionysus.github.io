@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>enter_haken - Cookbook</title>
+        <link rel="stylesheet" type="text/css" href="./css/default.css" />
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-109218061-1"></script>
+        <script>
+          var gaProperty = 'UA-109218061-1';
+          var disableString = 'ga-disable-' + gaProperty;
+       
+          if (document.cookie.indexOf(disableString + '=true') > -1) {
+              window[disableString] = true;
+          }
+ 
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', gaProperty, { 'anonymize_ip' : true });
+        </script>
+    </head>
+    <body>
+        <div id="header">
+            <div id="navigation">
+                <a href="./">enter_haken</a>
+                <a href="./projects.html">projects</a>
+                <a href="./cookbook.html">cookbook</a>
+                <a href="./notes.html">notes</a>
+                <a href="./read.html">read</a>
+                <a href="./about.html">about</a>
+            </div>
+        </div>
+
+        <div id="content">
+            <p>This is my loose collection of snippets, applications and commands, I use from day to day.</p>
+<h1 id="dot">dot</h1>
+<p><a href="https://en.wikipedia.org/wiki/DOT_(graph_description_language)">dot</a> is a graph description language. Assuming a image viewer like <a href="https://feh.finalrewind.org">feh</a> is installed</p>
+<pre><code>echo 'digraph { a -&gt; b; b -&gt; c; a -&gt; c; }' | dot -Tpng | feh -</code></pre>
+<p>will show</p>
+<p><img src="./images/dot_test.png" /></p>
+<h1 id="snippet">snippet</h1>
+<p>remove empty lines from output</p>
+<pre><code>sed '/^\s*$/d'</code></pre>
+<p>count lines of code (simple)</p>
+<pre><code>find . -name '*.extension' | xargs wc -l</code></pre>
+<p>same as above without emtpy lines and comments for erlang files</p>
+<pre><code>find . -name '*.erl' | xargs cat | sed -e '/^%/d' -e '/^\s*$/d' | wc -l</code></pre>
+<h1 id="bash">bash</h1>
+<pre><code>HISTSIZE=&quot;&quot;</code></pre>
+<p>or</p>
+<pre><code>HISTSIZE=&quot;INFINITE&quot;</code></pre>
+<p>will let the <code>~/.bash_history</code> grow infinitely. <a href="https://superuser.com/questions/479726/how-to-get-infinite-command-history-in-bash">source</a></p>
+<h2 id="gentoo-specific-aliases">gentoo specific aliases</h2>
+<pre><code>alias eqf='equery f'
+alias equ='equery u'
+alias eqh='equery h'
+alias eqa='equery a'
+alias eqb='equery b'
+alias eql='equery l'
+alias eqd='equery d'
+alias eqg='equery g'
+alias eqc='equery c'
+alias eqk='equery k'
+alias eqm='equery m'
+alias eqy='equery y'
+alias eqs='equery s'
+alias eqw='equery w'
+
+alias current=&quot;sudo genlop -c&quot;</code></pre>
+<h1 id="git">git</h1>
+<p>pull all repositories located in sub directories, assuming there are only subdirectories in the current directory</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb8-1" title="1"><span class="co">#!/bin/bash</span></a>
+<a class="sourceLine" id="cb8-2" title="2"><span class="fu">ls</span> <span class="kw">|</span> <span class="fu">xargs</span> -I{} <span class="fu">git</span> -C {} <span class="ex">pull</span></a></code></pre></div>
+<h2 id="reset-a-single-file">reset a single file</h2>
+<pre><code>git checkout HEAD -- fileName.xxx</code></pre>
+<h2 id="aliases">aliases</h2>
+<p>common aliases</p>
+<pre><code>git config --global alias.co checkout
+git config --global alias.br branch
+git config --global alias.ci commit
+git config --global alias.st status</code></pre>
+<h3 id="reset-a-single-file-to-head">reset a single file to head</h3>
+<pre><code>git config --global alias.unstage &quot;reset HEAD --&quot;
+git unstage file.txt</code></pre>
+<h3 id="show-graph">show graph</h3>
+<pre><code>git config --global alias.l &quot;log --graph --oneline --all&quot;</code></pre>
+<h3 id="cat-diff-to-default-browser">cat diff to default browser</h3>
+<p>With <a href="https://diff2html.xyz/">diff2html</a> a <code>git diff</code> output can be transformed into html.</p>
+<pre><code>npm install -g diff2html</code></pre>
+<p><a href="https://rtomayko.github.io/bcat/">bcat</a> is a tool for piping data to the standard browser.</p>
+<pre><code>git diff branch_1..branch_2 | diff2html -i stdin -o stdout | bcat</code></pre>
+<p>With an alias</p>
+<pre><code>alias bdiff=&quot;diff2html -i stdin -o stdout | bcat&quot;</code></pre>
+<p>the call can be simplified to.</p>
+<pre><code>git diff branch_1..branch_2 | bdiff</code></pre>
+<p>If you want to see the history of a file, you can use</p>
+<pre><code>git log -p filename | bdiff</code></pre>
+<h3 id="cat-the-content-of-a-libreoffice-or-docx-document-to-console">cat the content of a libreoffice or docx document to console</h3>
+<pre><code>alias lcat=&quot;libreoffice --cat&quot;</code></pre>
+<p>with</p>
+<pre><code>lcat document.docx | vim -</code></pre>
+<p>you can browse the text content in your favourite editor ;)</p>
+<h1 id="firefox-addons">firefox addons</h1>
+<ul>
+<li><a href="https://addons.mozilla.org/de/firefox/addon/vimfx/">VimFx</a> - using vim commands for browsing</li>
+<li><a href="https://addons.mozilla.org/de/firefox/addon/markdown-viewer/">MarkdownViewer</a> - render markdown files</li>
+</ul>
+<h1 id="tmux">tmux</h1>
+<p><a href="https://gist.github.com/MohamedAlaa/2961058">tmux shortcuts &amp; cheatsheet</a></p>
+<p>basic</p>
+<ul>
+<li><code>tmux a</code> - atach</li>
+<li><code>&lt;ctrl&gt; b d</code> - detatch</li>
+<li><code>&lt;shift&gt;</code> - select text with left mouse bottom <a href="https://awhan.wordpress.com/2012/04/18/tmux-copy-paste-with-mouse/">link</a></li>
+<li><code>&lt;shift&gt;</code> - paste text with right mouse bottom</li>
+</ul>
+<p>Window</p>
+<ul>
+<li><code>&lt;ctrl&gt; b c</code> - create new window</li>
+<li><code>&lt;ctrl&gt; b n</code> - next window</li>
+</ul>
+<p>Pane</p>
+<ul>
+<li><code>&lt;ctrl&gt; b x</code> - kill pane</li>
+<li><code>&lt;ctrl&gt; b &quot;</code> - create horizontal pane</li>
+<li><code>&lt;ctrl&gt; b %</code> - create vertical pane</li>
+</ul>
+<h1 id="batch">batch</h1>
+<ul>
+<li><code>for /F %L in (commandParameters.txt) do echo %L</code> - Execute command for every line in given textfile (in this case the <code>echo</code> command) / <a href="https://technet.microsoft.com/en-us/library/bb490909.aspx">for command</a></li>
+</ul>
+<h1 id="vim">vim</h1>
+<ul>
+<li><a href="http://vimsheet.com/">vimsheed</a> - a good summary of vim commands.</li>
+</ul>
+<h2 id="movement">movement</h2>
+<p>basic movement</p>
+<ul>
+<li><code>k</code> - up</li>
+<li><code>j</code> - down</li>
+<li><code>h</code> - left</li>
+<li><code>l</code> - right</li>
+</ul>
+<p>jumps</p>
+<ul>
+<li><code>0</code> - beginning of a line</li>
+<li><code>$</code> - end of a line</li>
+<li><code>w</code> - beginning of a world</li>
+<li><code>)</code> - forward one sentence</li>
+<li><code>(</code> - backward one sentence</li>
+</ul>
+<h2 id="visual">visual</h2>
+<ul>
+<li><code>vi'</code> - select inner text between two <code>'</code></li>
+<li><code>&lt;C-V&gt;</code> - select column
+<ul>
+<li><code>I</code> - insert text -&gt; <code>&lt;ESC&gt;</code> -&gt; insert text in front of the selection</li>
+</ul></li>
+</ul>
+<h2 id="repeats">repeats</h2>
+<ul>
+<li><code>g</code> - global
+<ul>
+<li><code>:g/Test/d</code> - delete all lines containing <code>Test</code></li>
+<li><code>:g!/Test/d</code> - delete all lines not containing <code>Test</code></li>
+</ul></li>
+</ul>
+<h2 id="substitute">substitute</h2>
+<ul>
+<li><code>:%s/foo/bar/g</code> - replace all <code>foo</code> with <code>bar</code></li>
+</ul>
+<h2 id="settings">settings</h2>
+<ul>
+<li><code>:set ignorecase</code> - case insensitive search</li>
+<li><code>:set wrap</code> / <code>:set nowrap</code> - enables / disables automatic line breaks</li>
+</ul>
+<h2 id="misc">misc</h2>
+<ul>
+<li><code>u</code> - undo</li>
+<li><code>&lt;ctrl&gt; r</code> - redo</li>
+<li><code>:w !sudo tee %</code> - save file, if you forgot <code>sudo</code></li>
+<li><code>:so $MYVIMRC</code> - reload the current <code>.vimrc</code></li>
+<li><code>e $MYVIMRC</code> - edit the current <code>.vimrc</code></li>
+</ul>
+<h1 id="haskell">haskell</h1>
+<p><a href="http://howistart.org/posts/haskell/1">How I start by Chris Allen</a></p>
+<p>Preconditions</p>
+<ul>
+<li>ghci / cabal / stack installed</li>
+<li><code>stack new projectName simple</code> - start a new simple haskell project</li>
+</ul>
+<p>after changed into project folder</p>
+<ul>
+<li><code>stack setup</code> - init project</li>
+<li><code>stack build</code> - build the project</li>
+<li><code>stack exec projectName</code> - start programm</li>
+<li><code>stack ghci</code> - load project aware ghci</li>
+</ul>
+<h2 id="ghci">ghci</h2>
+<ul>
+<li><code>:set -XOverloadedStrings</code> - activate overloaded string extension</li>
+</ul>
+<h1 id="erlang-elixir">erlang / elixir</h1>
+<h2 id="observer">observer</h2>
+<p><code>Erlang</code> has to be emerged with <code>smp</code> and <code>wxwidgets</code>use flag. For <code>elixir</code> you can start the <code>observer</code> with</p>
+<pre><code>$ iex
+Erlang/OTP 20 [erts-9.1] [source] [64-bit] [smp:8:8] [async-threads:10]
+
+Interactive Elixir (1.5.2) - press Ctrl+C to exit (type h() ENTER for help)
+iex(1)&gt; :observer.start
+:ok
+iex(2)&gt;</code></pre>
+<figure>
+<img src="./images/observer.png" alt="observer" /><figcaption>observer</figcaption>
+</figure>
+<h1 id="windows-batch-programming">Windows batch programming</h1>
+<p><a href="https://en.wikibooks.org/wiki/Windows_Batch_Scripting">Windows batch scripting</a></p>
+<ul>
+<li><code>START &quot;&quot; http://localhost</code> - starts a default browser with <code>http://localhost</code> or opens a new tab.</li>
+</ul>
+<h1 id="net-c">.NET / C#</h1>
+<h2 id="force-to-copy-an-unused-assembly">Force to copy an unused assembly</h2>
+<p>When the compiler sees no usage of a referenced assembly, it won’t be copied to the output folder. If you need for some reason the assembly in your output folder, you can create a dummy usage, which forces the compiler to copy the assembly.</p>
+<pre><code>private static void Dummy()
+{
+    Action&lt;Type&gt; doesNothingWith = _ =&gt; { };
+    var anyType = typeof(ReferencedAssembly.SomeClass);
+    doesNothingWith(anyType);
+}</code></pre>
+<h2 id="development-stack">Development stack</h2>
+<p>Sometimes it is usefull, to start a build from the command line. A <code>make_debugBuild.bat</code> can look like</p>
+<pre><code>call &quot;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\Tools\VsDevCmd.bat&quot;
+msbuild SolutionName.sln /p:Configuration=Debug</code></pre>
+<p>For a <code>make_releaseBuild.bat</code> you can just change the msbuild <code>Configuration</code> parameter.</p>
+<pre><code>call &quot;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\Tools\VsDevCmd.bat&quot;
+msbuild SolutionName.sln /p:Configuration=Release</code></pre>
+<p>To delete common generated / build folders from command line, you can use a <code>cleanup.bat</code> like</p>
+<pre><code>FOR /F &quot;tokens=*&quot; %%G IN ('DIR /B /AD /S obj') DO RMDIR /S /Q &quot;%%G&quot;
+FOR /F &quot;tokens=*&quot; %%G IN ('DIR /B /AD /S bin') DO RMDIR /S /Q &quot;%%G&quot;
+
+REM RMDIR /S /Q AdditionalFolderToDelete</code></pre>
+<h1 id="windows">Windows</h1>
+<p>Here comes the Windows related stuff</p>
+<h2 id="chocolatey">Chocolatey</h2>
+<p>A package manager for Windows.</p>
+<h3 id="installation">Installation</h3>
+<p>Before the installation you must allow remote scripts to run. Start a powershell with administrator rights</p>
+<pre><code>Set-ExecutionPolicy RemoteSigned
+iwr https://chocolatey.org/install.ps1 -UseBasicParsing | iex</code></pre>
+<h3 id="ack">Ack</h3>
+<pre><code>choco install ack </code></pre>
+<h1 id="misc-1">misc</h1>
+<h2 id="whatching-amazon-prime-video-from-chromium-on-a-gentoo-system-via-chromecast">whatching amazon prime video from chromium on a gentoo system via chromecast</h2>
+<p>At first the <code>widevine</code> use flag for <code>chromium</code> has to be enabled. It enables the closed source capability of chromium, used by Amazon Prime Video and Netflix. The <code>chrome://flags/#load-media-router-component-extension</code> has to be <code>enabled</code>. With this configuration you can go to prime videos and cast the tab while playing.</p>
+<p>In the long run a fire tv stick is a better fit, because it comes from the same house.</p>
+<h2 id="setup-system-date">setup system date</h2>
+<pre><code># date 041513122017
+Sat Apr 15 13:12:00 CEST 2017</code></pre>
+<h2 id="xclip">xclip</h2>
+<pre><code>cat id_rsa.pub | xclip -selection clipboard</code></pre>
+<h2 id="brightness">brightness</h2>
+<pre><code>$ sudo echo 800 &gt; /sys/class/backlight/intel_backlight/brightness</code></pre>
+<p>sets the current brightness to <code>800</code>. (1500 is default)</p>
+<h2 id="gcalcli">gcalcli</h2>
+<p>Working with the Google calendar on console</p>
+<p>put a <code>.gcalclirc</code> in users home directory</p>
+<pre><code>--client_id=&lt;client_id&gt;
+--client_secret=&lt;client-secret&gt;
+--locale=de_DE.utf8
+--defaultCalendar=&lt;calendar name&gt;</code></pre>
+<p>Set up some convenient aliases</p>
+<pre><code>alias week=&quot;gcalcli calw&quot;
+alias month=&quot;gcalcli calm&quot;
+alias todo=&quot;gcalcli agenda&quot;</code></pre>
+<p>Get the next three weeks</p>
+<pre><code>week 3</code></pre>
+        </div>
+        <div id="footer"> 
+            created by Jan Frederik Hake | 
+            <a href="https://enter-haken.github.io/atom.xml">atom feed</a> | 
+            generated by <a href="http://jaspervdj.be/hakyll">Hakyll</a> | 
+            <a href="https://github.com/enter-haken/blog">blog source</a> |
+            the source code on this site is covered by a <a href="./license.html">MIT license</a> | 
+            <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons Lizenzvertrag" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a>
+        </div>
+    </body>
+</html>

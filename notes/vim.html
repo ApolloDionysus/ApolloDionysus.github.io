@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>enter_haken - vim</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-109218061-1"></script>
+        <script>
+          var gaProperty = 'UA-109218061-1';
+          var disableString = 'ga-disable-' + gaProperty;
+       
+          if (document.cookie.indexOf(disableString + '=true') > -1) {
+              window[disableString] = true;
+          }
+ 
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', gaProperty, { 'anonymize_ip' : true });
+        </script>
+    </head>
+    <body>
+        <div id="header">
+            <div id="navigation">
+                <a href="../">enter_haken</a>
+                <a href="../projects.html">projects</a>
+                <a href="../cookbook.html">cookbook</a>
+                <a href="../notes.html">notes</a>
+                <a href="../read.html">read</a>
+                <a href="../about.html">about</a>
+            </div>
+        </div>
+
+        <div id="content">
+            <h1>vim</h1>
+
+<p>When <a href="https://en.wikipedia.org/wiki/Bram_Moolenaar">Bram Moolenaar</a> created vim in 1991, he made a foundation for one of the best editing experiences in the world. <a href="https://en.wikipedia.org/wiki/Vim_(text_editor)">Vim</a> is a highly customizable editor, especially used and loved by developers.</p>
+<!--more-->
+<h1 id="vimrc">.vimrc</h1>
+<p>The <code>.vimrc</code> is the config file for vim. You can add a own <code>.vimrc</code> in your home folder. There are some settings, which are more or less helpful.</p>
+<pre><code>set number</code></pre>
+<p>This command shows line numbers for every buffer.</p>
+<pre><code>syntax on</code></pre>
+<p>Depending on the file extension or file type, the syntax is highlighted if possible. This option is very use full for coding, and works for several languages.</p>
+<pre><code>set autoindent</code></pre>
+<p>When this option is enabled, every time you hit <code>&lt;enter&gt;</code> in <em>edit mode</em>, you get the same indention as the line above. This is quite useful, when you’re writing code blocks, especially when you’re coding in a language with indention as a semantic meaning like python.</p>
+<h1 id="plugins">plugins</h1>
+<p>One of the common plugin managers for Vim is called <a href="https://github.com/VundleVim/Vundle.vim">Vundle</a>, which is short for <em>Vim bundle</em>. It helps tracking plugin changes and offers convenience functions for adding, updating and deleting bundles.</p>
+<p>A minimal <code>.vimrc</code> integration looks like</p>
+<pre><code>set nocompatible
+filetype off   
+
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+Plugin 'VundleVim/Vundle.vim'
+
+&quot; add plugins here 
+
+call vundle#end()
+filetype plugin indent on</code></pre>
+<p>After adding a plugin to the <code>.vimrc</code> and a reload, you can call <code>BundleInstall</code> to install the new plugins.</p>
+<h2 id="syntastic">syntastic</h2>
+<p>When you write code with vim, <a href="https://github.com/vim-syntastic/syntastic">syntastic</a> is one of the most helping plugins. It offers syntax checking for several languages.</p>
+<pre><code>Plugin 'scrooloose/syntastic'</code></pre>
+<h2 id="ctrlp">CtrlP</h2>
+<p>When you have deeply nested project folder, <a href="https://github.com/ctrlpvim/ctrlp.vim">CtrlP</a> helps you finding the right file using fuzzy logic. It is quite fast, and completely written in vim script.</p>
+<pre><code>https://github.com/ctrlpvim/ctrlp.vim</code></pre>
+<h2 id="delimitmate">delimitMate</h2>
+<p>When you write code, you often open and close quotes, parenthesis and brackets. <a href="https://github.com/Raimondi/delimitMate">delimitMate</a> helps you closing these, if necessary, but you can write the closing part if you like.</p>
+<pre><code>Plugin 'Raimondi/delimitMate'</code></pre>
+<h2 id="vim-airline">vim-airline</h2>
+<p><a href="https://github.com/vim-airline/vim-airline">vim-airline</a> gives you a quit fast status- and tab line.</p>
+<pre><code>Plugin 'bling/vim-airline'</code></pre>
+<h1 id="misc">misc</h1>
+<p>This are some vim hints, which are helpful from time to time.</p>
+<h2 id="pretty-print-xml-on-a-windows-machine">pretty print xml on a windows machine</h2>
+<p>If you want to pretty print a xml file on a windows machine, you need a running version of <code>libxml</code>. Therefore you need the following files from the <a href="http://xmlsoft.org/sources/win32/">libxml project downloads</a>.</p>
+<ul>
+<li><a href="http://xmlsoft.org/sources/win32/libxml2-2.7.8.win32.zip">libXml</a></li>
+<li><a href="http://xmlsoft.org/sources/win32/iconv-1.9.2.win32.zip">iConv</a></li>
+<li><a href="http://xmlsoft.org/sources/win32/zlib-1.2.5.win32.zip">zLib</a></li>
+</ul>
+<p>The binary folders should be added to the system path, so <code>xmllint.exe</code> is accessible from command line.</p>
+<p>If you want to pretty print a xml in a open buffer you can execute</p>
+<pre><code>:% !xmllint.exe &quot;%&quot; --format</code></pre>
+<p>The current open buffer is replaced with the result of <code>xmllint.exe</code>.</p>
+<h2 id="ctags">ctags</h2>
+<p>You can tag your sources using <a href="http://ctags.sourceforge.net/">ctags</a>. This is a very helpful tool, when you are working on huge codebases.</p>
+<p>First of all you have to build up the tag file in the root of your application with</p>
+<pre><code>ctags -R .</code></pre>
+<p>After starting vim you can use</p>
+<pre><code>:tag whatever</code></pre>
+<p>to search your application and browse to the occurrences with</p>
+<pre><code>:ts</code></pre>
+<p><code>ctags</code> is very helpful in combination with <code>CtrlP</code>.</p>
+<pre><code>:CtrlPTag</code></pre>
+<p>will use the generated <code>tags</code> file for navigation through the sources. For further reading Andrew Stewards <a href="https://andrew.stwrt.ca/posts/vim-ctags/">blog post</a> will give you more information.</p>
+
+        </div>
+        <div id="footer"> 
+            created by Jan Frederik Hake | 
+            <a href="https://enter-haken.github.io/atom.xml">atom feed</a> | 
+            generated by <a href="http://jaspervdj.be/hakyll">Hakyll</a> | 
+            <a href="https://github.com/enter-haken/blog">blog source</a> |
+            the source code on this site is covered by a <a href="../license.html">MIT license</a> | 
+            <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons Lizenzvertrag" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a>
+        </div>
+    </body>
+</html>

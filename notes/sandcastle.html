@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>enter_haken - sandcastle</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-109218061-1"></script>
+        <script>
+          var gaProperty = 'UA-109218061-1';
+          var disableString = 'ga-disable-' + gaProperty;
+       
+          if (document.cookie.indexOf(disableString + '=true') > -1) {
+              window[disableString] = true;
+          }
+ 
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', gaProperty, { 'anonymize_ip' : true });
+        </script>
+    </head>
+    <body>
+        <div id="header">
+            <div id="navigation">
+                <a href="../">enter_haken</a>
+                <a href="../projects.html">projects</a>
+                <a href="../cookbook.html">cookbook</a>
+                <a href="../notes.html">notes</a>
+                <a href="../read.html">read</a>
+                <a href="../about.html">about</a>
+            </div>
+        </div>
+
+        <div id="content">
+            <h1>sandcastle</h1>
+
+<p>Donald Knuth wrote about <a href="https://en.wikipedia.org/wiki/Literate_programming">literate programming</a> years ago. Literate programming is about keeping the documentation near to the implementation. Over years, several products like <a href="http://www.stack.nl/~dimitri/doxygen/">doxygen</a> are helping to solve this kind of problem. There exists a product named <a href="https://github.com/EWSoftware/SHFB">sandcastle</a> for .NET based code. It is able to generate MSDN like documentation.</p>
+<!--more-->
+<p>At first you have to download the <a href="https://github.com/EWSoftware/SHFB/releases">latest</a> version of sandcastle. After creating a <code>.shfbproj</code> file, the <code>XML documentation file</code> check box in the <code>output</code> section of the project build configuration has to be enabled.</p>
+<h1 id="convenience-batch-files">convenience batch files</h1>
+<p>For convenience you can add some batch files to the solution root.</p>
+<h2 id="make-debug-build">make debug build</h2>
+<pre><code>REM --
+REM -- This script builds the solution for the debug configuration
+REM --
+
+call &quot;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\Tools\VsDevCmd.bat&quot;
+msbuild SandCastleTest.sln /p:Configuration=Debug
+
+IF &quot;%1&quot; == &quot;--noPause&quot; goto END
+
+pause
+
+:END</code></pre>
+<h2 id="remove-generated-files">remove generated files</h2>
+<pre><code>REM --
+REM -- This script deletes all obj / bin folders from solution
+REM --
+
+FOR /F &quot;tokens=*&quot; %%G IN ('DIR /B /AD /S obj') DO RMDIR /S /Q &quot;%%G&quot;
+FOR /F &quot;tokens=*&quot; %%G IN ('DIR /B /AD /S bin') DO RMDIR /S /Q &quot;%%G&quot;
+
+REM -- delete generated folders from solution root directory
+RMDIR /S /Q Help</code></pre>
+<h2 id="generate-help-files-and-start-local-http-server">generate help files and start local http server</h2>
+<pre><code>@ECHO OFF
+REM --
+REM -- build documentation
+REM --
+
+CALL deepClean.bat
+CALL make_debugBuild.bat --noPause
+
+REM -- build documentation
+CALL &quot;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\Tools\VsDevCmd.bat&quot;
+msbuild SandCastleTestDocumentation.shfbproj
+
+REM -- open browser first ...
+START &quot;&quot; http://localhost:8000
+REM -- ... because the web server is blocking
+
+cd Help
+
+REM -- the next command creates a local web server and serves 
+REM -- recursively all contents from the current folder.
+
+REM -- this works, if python &gt;3 is installed, 
+REM -- and the path variable is up to date
+python -m http.server</code></pre>
+<p>It is assumed, that python &gt; 3.x is installed. You can choose an other web server, if you like.</p>
+<h1 id="start">Start</h1>
+<p>At the beginning there are a lot of warnings in the <code>Error List</code>. These are reminder for missing comments. When the documentation is build at this point, it will be very empty. Now is the time fill some contents.</p>
+<p>Lets start with a simple [example][sandcastleTestBase].</p>
+<p>A printable document is described by an interface.</p>
+<pre><code>namespace SandcastleTest.Base
+{
+    /// &lt;summary&gt;
+    /// A printable document
+    /// &lt;/summary&gt;
+    public interface IPrintable
+    {
+        /// &lt;summary&gt;
+        /// Prints a &lt;see cref=&quot;IPrintable&quot;/&gt;
+        /// &lt;/summary&gt;
+        void Print();
+    }
+}</code></pre>
+<p>The <code>&lt;see&gt;</code> tag references a type within a documentation. If the <code>cref</code> attribute value is misspelled, you get a compiler warning.</p>
+<p>If you apply the <code>IPrintable</code> interface to a <code>Document</code>,</p>
+<pre><code>using System;
+using System.Text;
+
+namespace SandcastleTest.Base
+{
+    /// &lt;inheritdoc/&gt;
+    /// &lt;summary&gt;
+    /// A document
+    /// &lt;/summary&gt;
+    public class Document : IPrintable
+    {
+        /// &lt;summary&gt;
+        /// Documents title. 
+        /// &lt;/summary&gt;
+        public string Title { get; set; }
+
+        /// &lt;summary&gt;
+        /// Content of a document
+        /// &lt;/summary&gt;
+        public string Content { get; set; }
+
+        /// &lt;inheritdoc/&gt;
+        public void Print()
+        {
+            Console.WriteLine(ToString());
+        }
+
+        /// &lt;summary&gt;
+        /// Get a string representation of a &lt;see cref=&quot;Document&quot;/&gt;
+        /// &lt;/summary&gt;
+        /// &lt;returns&gt;the documents &lt;see cref=&quot;Title&quot;/&gt; and the &lt;see cref=&quot;Content&quot;/&gt;&lt;/returns&gt;
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine(Title);
+            sb.AppendLine(Content);
+
+            return sb.ToString();
+        }
+    }
+}</code></pre>
+<p>you can see, the interface method <code>Print()</code> does not has to be documented. The documentation is inherited from the interface. The <code>&lt;inheritdoc&gt;</code> tag is used for this application.</p>
+<p>For namespace documentation a <code>NamespaceDoc</code> class has to be added to the namespace.</p>
+<pre><code>using System.Runtime.CompilerServices;
+
+namespace SandcastleTest.Base
+{
+    /// &lt;summary&gt;
+    /// this comment appears in the namespace documentation
+    /// &lt;/summary&gt;
+    [CompilerGenerated]
+    class NamespaceDoc
+    {
+        // this class is only used for namespace documentation
+    }
+}</code></pre>
+<p>The <code>CompilerGenerated</code> attribute prevents sandcastle to generate a documentation for the class itself.</p>
+<h1 id="documenting-a-larger-project">documenting a larger project</h1>
+<p>In a more complex examples you have a deep inheritance hierarchy. When you are coming into a mature project / product you’ll find interfaces and/or abstract classes defining base behavior or base data structures. The goal is, to reuse documentation as much as possible.</p>
+<p>For demonstration there is a data base class <code>PocoBase</code>, which defines a unique <code>Id</code> for all data entities used in an application.</p>
+<pre><code>using System;
+
+namespace SandcastleTest.Generic.POCO
+{
+    /// &lt;summary&gt;
+    /// Base class for all POCOs
+    /// &lt;/summary&gt;
+    public abstract class PocoBase
+    {
+        private Guid _Id = Guid.Empty;
+
+        /// &lt;summary&gt;
+        /// Id for the entity
+        /// &lt;/summary&gt;
+        /// &lt;remarks&gt;
+        /// If the &lt;see cref=&quot;_Id&quot;/&gt; is &lt;see cref=&quot;Guid.Empty&quot;/&gt; 
+        /// a new &lt;see cref=&quot;Guid&quot;/&gt; is generated.
+        /// &lt;/remarks&gt;
+        public Guid Id
+        {
+            get
+            {
+                if (_Id == Guid.Empty)
+                    _Id = Guid.NewGuid();
+
+                return _Id;
+            }
+            set
+            {
+                _Id = value;
+            }
+        }
+
+        /// &lt;summary&gt;
+        /// Gets a hascode for a &lt;see cref=&quot;PocoBase&quot;/&gt;
+        /// &lt;/summary&gt;
+        /// &lt;returns&gt; a hascode for a &lt;see cref=&quot;PocoBase&quot;/&gt;&lt;/returns&gt;
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
+    }
+}</code></pre>
+<p>The documentation part will often be a bigger part of the code. You can fold the documentation in Visual Studio if you like. Most editors offer this feature, do get a more compact view on the code if necessary.</p>
+<p>When a data access layer uses this pocos based on <code>PocoBase</code> you can define some base methods for data access.</p>
+<pre><code>using SandcastleTest.Generic.POCO;
+
+using System;
+using System.Collections.Generic;
+
+namespace SandcastleTest.Generic.DAL
+{
+    /// &lt;summary&gt;
+    /// A base interface for all CRUD operations
+    /// &lt;/summary&gt;
+    /// &lt;typeparam name=&quot;T&quot;&gt;&lt;inheritdoc cref=&quot;PocoBase&quot; select=&quot;summary&quot;/&gt;&lt;/typeparam&gt;
+    public interface ICreateReadUpdateDelete&lt;T&gt; where T : PocoBase
+    {
+        /// &lt;summary&gt;
+        /// Create a new &lt;paramref name=&quot;entity&quot;/&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;entity&quot;&gt;&lt;inheritdoc cref=&quot;PocoBase&quot; select=&quot;summary&quot;/&gt;&lt;/param&gt;
+        void Create(T entity);
+
+        /// &lt;summary&gt;
+        /// Get a list of &lt;typeparamref name=&quot;T&quot;/&gt;
+        /// &lt;/summary&gt;
+        /// &lt;returns&gt;a list of &lt;typeparamref name=&quot;T&quot;/&gt;&lt;/returns&gt;
+        List&lt;T&gt; GetList();
+
+        /// &lt;summary&gt;
+        /// Get an entity by &lt;see cref=&quot;PocoBase.Id&quot;/&gt;
+        /// &lt;/summary&gt;
+        /// &lt;returns&gt;an entity of type &lt;typeparamref name=&quot;T&quot;/&gt;&lt;/returns&gt;
+        T GetEntity(Guid id);
+
+        /// &lt;summary&gt;
+        /// Update an entity of &lt;typeparamref name=&quot;T&quot;/&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;entity&quot;&gt;&lt;inheritdoc cref=&quot;PocoBase&quot; select=&quot;summary&quot;/&gt;&lt;/param&gt;
+        /// &lt;returns&gt;if the update succeeded, this method returns true, otherwise false.&lt;/returns&gt;
+        bool Update(T entity);
+
+        /// &lt;summary&gt;
+        /// Deletes an entity of  &lt;typeparamref name=&quot;T&quot;/&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;entity&quot;&gt;&lt;inheritdoc cref=&quot;PocoBase&quot; select=&quot;summary&quot;/&gt;&lt;/param&gt;
+        /// &lt;returns&gt;if the deletion succeeded, this method returns true, otherwise false.&lt;/returns&gt;
+        bool Delete(T entity);
+    }
+}</code></pre>
+<p>The <code>summary</code> documentation of <code>PocoBase</code> is reused with the <code>&lt;inheritdoc cref=&quot;PocoBase&quot; select=&quot;summary&quot;/&gt;</code> statement. The interface contains a base documentation for the generic behavior of managing CRUD operations.</p>
+<p>The next abstraction layer is a implementation of these methods. The simplest example uses the file system as a storage.</p>
+<pre><code>using Newtonsoft.Json;
+
+using SandcastleTest.Generic.POCO;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+namespace SandcastleTest.Generic.DAL.FileSystemStorage
+{
+    /// &lt;inheritdoc/&gt;
+    /// &lt;summary&gt;
+    /// Handling CRUD actions for file system storage.
+    /// &lt;/summary&gt;
+    public abstract class Crud&lt;T&gt; : ICreateReadUpdateDelete&lt;T&gt;
+        where T : PocoBase
+    {
+        /// &lt;summary&gt;
+        /// Gets the file name of the current entity.
+        /// The filename is constructed with the poco class name and the extension .json
+        /// &lt;/summary&gt;
+        private string FileName =&gt; $&quot;{typeof(T).Name }.json&quot;;
+
+        /// &lt;summary&gt;
+        /// Get all contents of the file, containing all the contents of the entity.
+        /// &lt;/summary&gt;
+        private string Content =&gt; File.ReadAllText(FileName);
+
+        /// &lt;summary&gt;
+        /// Saves a raw string representation to file system.
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;rawContent&quot;&gt;a raw string representation&lt;/param&gt;
+        private void Store(string rawContent) =&gt; File.WriteAllText(FileName, rawContent);
+
+        /// &lt;summary&gt;
+        /// Stores a &lt;see cref=&quot;List{T}&quot;/&gt; to  the file system
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;allEntities&quot;&gt;all entities&lt;/param&gt;
+        private void Store(List&lt;T&gt; allEntities) =&gt; Store(JsonConvert.SerializeObject(allEntities));
+
+        /// &lt;inheritdoc/&gt;
+        /// &lt;exception cref=&quot;ArgumentNullException&quot;&gt;is thrown, when &lt;paramref name=&quot;entity&quot;/&gt; is null&lt;/exception&gt;
+        public void Create(T entity)
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            var allEntities = GetList();
+            if (Exists(allEntities, entity))
+                return; // no update on creation
+
+            allEntities.Add(entity);
+
+            Store(allEntities);
+        }
+
+        /// &lt;inheritdoc/&gt;
+        public bool Delete(T entity)
+        {
+            var allEntities = GetList();
+            if (!(Exists(allEntities, entity)))
+                return false ;
+
+            var itemToRemove = allEntities.SingleOrDefault(x =&gt; x.Id == entity.Id);
+            if (itemToRemove == null)
+                return false;
+
+            if (allEntities.Remove(itemToRemove))
+            {
+                Store(allEntities);
+                return true;
+            }
+
+            return false;
+        }
+
+        /// &lt;inheritdoc/&gt;
+        public T GetEntity(Guid id) =&gt; GetList().SingleOrDefault(x =&gt; x.Id == id);
+
+        /// &lt;inheritdoc/&gt;
+        public List&lt;T&gt; GetList()
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject&lt;List&lt;T&gt;&gt;(Content);
+            }
+            catch
+            {
+                // maybe file does not exists...
+                return new List&lt;T&gt;();
+            }
+        }
+
+        /// &lt;inheritdoc/&gt;
+        public bool Update(T entity)
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            var allEntities = GetList();
+            if (Exists(allEntities, entity))
+            {
+                allEntities.Replace(entity);
+                Store(allEntities);
+
+                return true;
+            }
+            return false;
+        }
+
+        /// &lt;summary&gt;
+        /// Checks, if &lt;paramref name=&quot;allEntities&quot; /&gt; contains a &lt;paramref name=&quot;entityToCheck&quot;/&gt;
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;allEntities&quot;&gt;all entities&lt;/param&gt;
+        /// &lt;param name=&quot;entityToCheck&quot;&gt;an entity to check&lt;/param&gt;
+        /// &lt;returns&gt;true, if &lt;paramref name=&quot;allEntities&quot; /&gt; contains a &lt;paramref name=&quot;entityToCheck&quot;/&gt;&lt;/returns&gt;
+        private bool Exists(List&lt;T&gt; allEntities, T entityToCheck)
+        {
+            if (allEntities == null)
+                return false;
+
+            return allEntities.Contains(entityToCheck, new PocoBaseEqualityComparer());
+        }
+    }
+}</code></pre>
+<p>This code should just work. I know this is not performance friendly. For a demonstration it is just enough.</p>
+<p>As you can see in the <a href="../example/sandcastle/html/e8807ce7-b71c-ccbc-c71e-15c9299f5d9b.htm">generated result</a>, a more concrete class can inherit a part of the documentation of their base class and interface. You must try to write the base documentation as reusable as possible.</p>
+<p>If you like to store a <code>Customer</code> on file system, the classes can look like following.</p>
+<p>First a kind of <code>Person</code> is needed. It can be assumed, that in a bigger application this class is a base class for human like entities (e.g. Customer, Employee, Manager …).</p>
+<pre><code>namespace SandcastleTest.Generic.POCO
+{
+    /// &lt;summary&gt;
+    /// A base class with base properties for a person.
+    /// &lt;/summary&gt;
+    public abstract class Person :  PocoBase
+    {
+        /// &lt;summary&gt;
+        /// First name of a person
+        /// &lt;/summary&gt;
+        public string FirstName { get; set; }
+
+        /// &lt;summary&gt;
+        /// Last name of a person
+        /// &lt;/summary&gt;
+        public string LastName { get; set; }
+
+        /// &lt;summary&gt;
+        /// Overrides a &lt;see cref=&quot;ToString&quot;/&gt; representation of an person
+        /// &lt;/summary&gt;
+        /// &lt;returns&gt;a &lt;see cref=&quot;ToString&quot;/&gt; representation of an person&lt;/returns&gt;
+        public override string ToString()
+        {
+            return $&quot;Person: {FirstName} - {LastName}&quot;;
+        }
+    }
+}</code></pre>
+<p>Deriving from <code>PocoBase</code> gives every <code>Person</code> an identifier. The <a href="../example/sandcastle/html/cc5624ed-c08d-ab34-c42e-4b97de71fa4c.htm">documentation</a> for <code>FistName</code> and <code>LastName</code> can be inherited from deriving classes.</p>
+<pre><code>namespace SandcastleTest.Generic.POCO
+{
+    /// &lt;summary&gt;
+    /// A customer
+    /// &lt;/summary&gt;
+    public class Customer : Person
+    {
+        /// &lt;summary&gt;
+        /// A customer number
+        /// &lt;/summary&gt;
+        public string CustomerNumber { get; set; }
+
+        /// &lt;summary&gt;
+        /// Overrides the &lt;see cref=&quot;ToString&quot;/&gt; method
+        /// &lt;/summary&gt;
+        /// &lt;returns&gt;a string representation of a customer&lt;/returns&gt;
+        public override string ToString()
+        {
+            return $&quot;Customer: {CustomerNumber} ({base.ToString()})&quot;;
+        }
+    }
+}</code></pre>
+<p>For this example the <code>Customer</code> has a <code>CustomerNumber</code>. Customer related stuff can be added here, if needed. Every thing else is derived from the base class <code>Person</code>. The <a href="../example/sandcastle/html/7696b3d3-c681-f48b-bda3-db48fcaecb00.htm">result</a> looks promising.</p>
+<p>The simplest class for doing CRUD operation on a <code>Customer</code> for a file system is just a empty subclass of <code>Crud&lt;T&gt;</code>.</p>
+<pre><code>using SandcastleTest.Generic.POCO;
+
+namespace SandcastleTest.Generic.DAL.FileSystemStorage
+{
+    /// &lt;summary&gt;
+    /// Provides methods to access a &lt;see cref=&quot;Customer&quot;/&gt;
+    /// &lt;/summary&gt;
+    public class CustomerAccess : Crud&lt;Customer&gt;
+    {
+    }
+}</code></pre>
+<p>The interesting thing here is the <a href="../example/sandcastle/html/f9bf04a0-9eaa-8366-d929-d5814c9b97cd.htm">generated documentation</a> for the above class. You can see, that most method documentation is inherited from base classes and interfaces.</p>
+<p>You can explore more from the <a href="https://github.com/enter-haken/SandcastleDemo/tree/master/SandcastleTest">test code</a>, or you can browse through the generated <a href="../example/sandcastle/index.html">result</a>.</p>
+
+        </div>
+        <div id="footer"> 
+            created by Jan Frederik Hake | 
+            <a href="https://enter-haken.github.io/atom.xml">atom feed</a> | 
+            generated by <a href="http://jaspervdj.be/hakyll">Hakyll</a> | 
+            <a href="https://github.com/enter-haken/blog">blog source</a> |
+            the source code on this site is covered by a <a href="../license.html">MIT license</a> | 
+            <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons Lizenzvertrag" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a>
+        </div>
+    </body>
+</html>
