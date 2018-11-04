@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <title>about code</title>
-    <link href="https://enter-haken.github.io/atom.xml" rel="self" />
-    <link href="https://enter-haken.github.io" />
-    <id>https://enter-haken.github.io/atom.xml</id>
+    <title>ApolloDionysus</title>
+    <link href="https://www.cryptodionysus.com//atom.xml" rel="self" />
+    <link href="https://www.cryptodionysus.com/" />
+    <id>https://www.cryptodionysus.com//atom.xml</id>
     <author>
-        <name>Jan Frederik Hake</name>
-        <email>jan_hake@gmx.de</email>
+        <name>Dionysus</name>
+        <email>ah2018gg@gmail.com</email>
     </author>
     <updated>2018-10-23T00:00:00Z</updated>
     <entry>
     <title>About</title>
-    <link href="https://enter-haken.github.io/posts/2018-10-23-thoughts.html" />
-    <id>https://enter-haken.github.io/posts/2018-10-23-thoughts.html</id>
+    <link href="https://www.cryptodionysus.com//posts/2018-10-23-thoughts.html" />
+    <id>https://www.cryptodionysus.com//posts/2018-10-23-thoughts.html</id>
     <published>2018-10-23T00:00:00Z</published>
     <updated>2018-10-23T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>This is a collection of posts that describe fundamental concepts of computation in the 21st century.</p>
