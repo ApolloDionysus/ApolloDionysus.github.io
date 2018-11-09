@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Crypto Dionysus- Git Cleanup</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    </head>
+    <body>
+        <div id="header">
+            <div id="navigation">
+                <a href="../">Home</a>
+                <a href="../research.html">research</a>
+                <a href="../pure-math.html">pure-math</a>
+                <a href="../courses.html">courses</a>
+                <a href="../old-courses.html">old-courses</a>
+                <a href="../music.html">music</a>
+                <a href="../writing.html">writing</a>
+                <a href="../notes.html">notes</a>
+            </div>
+        </div>
+
+        <div id="content">
+            <h1>Git Cleanup</h1>
+
+<p>After working over months with several developers on one repository, a little bit “tree care” is necessary. Usually old merged branches are deleted on server, when they are not needed any more.</p>
+<!--more-->
+<pre><code>for branch in `git branch -r --merged master`;
+do
+    comitter=`git show --format=&quot;%an&quot; $branch | head -n 1;`
+    if [ &quot;$comitter&quot; = &quot;$1&quot; ]; then
+        echo -e &quot;$branch&quot;
+    fi
+done</code></pre>
+<p>Feature branches can be found like:</p>
+<pre><code>./myBranches.sh &quot;Jan Frederik Hake&quot; | grep feature</code></pre>
+<p>If you cut of the remote prefix a call to</p>
+<pre><code>./myBranches.sh &quot;Jan Frederik Hake&quot; | grep feature | cut -d '/' -f 2,3 | xargs git push origin --delete</code></pre>
+<p>deletes the merged branches from a remote repository.</p>
+
+        </div>
+    </body>
+</html>
