@@ -10,13 +10,13 @@
     <body>
         <div id="header">
             <div id="navigation">
-                <a href="../">Notes</a>
+                <a href="../">Writing</a>
                 <a href="../research.html">Research</a>
                 <a href="../pure-math.html">Pure-math</a>
                 <a href="../courses.html">Courses</a>
                 <a href="../old.html">Archives</a>
                 <a href="../music.html">Music</a>
-                <a href="../writing.html">Writing</a>
+                <a href="../writing.html">Essays</a>
             </div>
         </div>
 
@@ -41,7 +41,7 @@ putStr :: String -&gt; IO ()</code></pre>
 <p><code>True</code> and <code>False</code> are <em>value constructors.</em> Value constructors can have zero or more parameters.</p>
 <pre><code>data Person = SimplePerson String String</code></pre>
 <p>In this example a <code>Person</code> can be created using the value constructor <code>SimplePerson</code>. The first parameter will be the first name, the second the last name.</p>
-<pre><code>ghci&gt; :t SimplePerson 
+<pre><code>ghci&gt; :t SimplePerson
 SimplePerson :: String -&gt; String -&gt; Person</code></pre>
 <p>Creating a new <code>Person</code> in ghci will cause an error, if you don’t bind it to a variable.</p>
 <pre><code>ghci&gt; data Person = SimplePerson String String
