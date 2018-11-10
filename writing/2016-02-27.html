@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -24,6 +25,7 @@
 
 <p>After working over months with several developers on one repository, a little bit “tree care” is necessary. Usually old merged branches are deleted on server, when they are not needed any more.</p>
 <!--more-->
+<p>\[ \ln x = \int_{-\infty}^x \frac 1 y \, dy . \]</p>
 <pre><code>for branch in `git branch -r --merged master`;
 do
     comitter=`git show --format=&quot;%an&quot; $branch | head -n 1;`
@@ -36,6 +38,7 @@ done</code></pre>
 <p>If you cut of the remote prefix a call to</p>
 <pre><code>./myBranches.sh &quot;Jan Frederik Hake&quot; | grep feature | cut -d '/' -f 2,3 | xargs git push origin --delete</code></pre>
 <p>deletes the merged branches from a remote repository.</p>
+<p><img src="../images/dot_test.png" /></p>
 
         </div>
     </body>
