@@ -16,8 +16,8 @@
     <published>2018-11-09T00:00:00Z</published>
     <updated>2018-11-09T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>This is a long and constantly updated list of useful resources for study. There is no particular order, and I will probably find a structure that makes for these papers, but for now they are just group by random categories that are only meaningful to myself.</p>
-<p>CSE 250A material: * <a href="www.cryptodionysus.com/pdfs/ARL-TR-8345.pdf">belief networks</a> are the precursor to unsupervised learning.</p>
-<p>Information Theory: * <a href="www.cryptodionysus.com/pdfs/information_theory.pdf">Claude Shannon</a> was both a great philosopher and mathematician.</p>]]></summary>
+<p>CSE 250A material: * <a href="/pdfs/ARL-TR-8345.pdf">belief networks</a> are the precursor to unsupervised learning.</p>
+<p>Information Theory: * <a href="/pdfs/information_theory.pdf">Claude Shannon</a> was both a great philosopher and mathematician.</p>]]></summary>
 </entry>
 <entry>
     <title>A Hard Reset</title>
