@@ -8,8 +8,17 @@
         <name>Dionysus</name>
         <email>ah2018gg@gmail.com</email>
     </author>
-    <updated>2018-11-09T00:00:00Z</updated>
+    <updated>2018-12-22T00:00:00Z</updated>
     <entry>
+    <title>Cloudy Thoughts Weekly Plan</title>
+    <link href="https://www.cryptodionysus.com//posts/2018-12-22-Dec_week4.html" />
+    <id>https://www.cryptodionysus.com//posts/2018-12-22-Dec_week4.html</id>
+    <published>2018-12-22T00:00:00Z</published>
+    <updated>2018-12-22T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>Thoughts: Starting to regain self.</p>
+<p>This week: Become a better software engineer - Software principles class. Do HW1-4.cpp over the next week. - Will need to learn to write tests and their importants - Practice (C++ as object oreinted C): Implement Vector, String, read the 3 textbooks - “Understand” Reluplex code for professor - simply implement (parallel) linear alogirthm in FPGA over reluplex.</p>]]></summary>
+</entry>
+<entry>
     <title>Papers to read</title>
     <link href="https://www.cryptodionysus.com//posts/2018-11-09-papers.html" />
     <id>https://www.cryptodionysus.com//posts/2018-11-09-papers.html</id>
